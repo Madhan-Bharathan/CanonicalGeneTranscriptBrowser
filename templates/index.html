@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src = "https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src = "https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styling.css') }}">
+<script type="text/javascript" src="{{ url_for('static', filename='javajs.js') }}"></script>
+</head>
+<body>
+
+<div class="tab">
+
+<button class="tablinks" onclick="openFunc(event, 'create')">CREATE</button>
+<button class="tablinks" onclick="openFunc(event, 'update')">UPDATE</button>
+<button class="tablinks" onclick="openFunc(event, 'delete')">DELETE</button>
+
+</div>
+<h1> <b> GENESYMBOL - TRANSCRIPT-ID </b></h1>
+<h2> <b>Transcription: </b> </h2>
+<p id="description">Transcription is the process of making an RNA copy of a gene sequence. This copy, called a messenger RNA (mRNA) molecule, leaves the cell nucleus and enters the cytoplasm, where it directs the synthesis of the protein, which it encodes.</p>
+<div id="create" class="tabcontent">
+    <form action="{{ url_for('createe')}}" method="post">
+        <h3>Enter new GeneSymbol and TranscriptID to store in the database</h3>
+        <input id="creategene" type="text" placeholder="Enter Gene Symbol" name="genecreate">
+        <input id="createtrans" type="text" placeholder="Enter Transcript ID" name="transcreate">
+        <input id="createtrans" type="submit" placeholder="submit">
+    </form>
+</div>
+<div id="update" class="tabcontent">
+    <form action="{{ url_for('updatee')}}" method="post">
+<h3>Enter the GeneSymbol and TranscriptID to update in the database</h3>
+        <input id="creategene" type="text" placeholder="Enter Gene Symbol" name="geneupdate">
+        <input id="createtrans" type="text" placeholder="Enter Transcript ID" name="transupdate">
+        <input id="createtrans" type="submit" placeholder="submit">
+
+    </form>
+</div>
+<div id="delete" class="tabcontent">
+    <form action="{{ url_for('deletee')}}" method="post">
+<h3>Enter the GeneSymbol to delete from the database</h3>
+        <input id="createtrans" type="text" placeholder="Enter Gene Symbol" name="delete">
+        <input id="createtrans" type="submit" placeholder="submit">
+    </form>
+</div>
+
+
+<br></br>
+<div id="loading" class="center"><p><b>Loading</b></p></div>
+<form action="{{ url_for('search') }}" method="post">
+    <label for="search">Search:
+        <input type="text" id="search" name="search" >
+    </label>
+</form>
+<ul>
+    <li><a href="{{url_for('letter', letter='A')}}">A</a></li>
+    <li><a href="{{url_for('letter', letter='B')}}">B</a></li>
+    <li><a href="{{url_for('letter', letter='C')}}">C</a></li>
+    <li><a href="{{url_for('letter', letter='D')}}">D</a></li>
+    <li><a href="{{url_for('letter', letter='E')}}">E</a></li>
+    <li><a href="{{url_for('letter', letter='F')}}">F</a></li>
+    <li><a href="{{url_for('letter', letter='G')}}">G</a></li>
+    <li><a href="{{url_for('letter', letter='H')}}">H</a></li>
+    <li><a href="{{url_for('letter', letter='I')}}">I</a></li>
+    <li><a href="{{url_for('letter', letter='J')}}">J</a></li>
+    <li><a href="{{url_for('letter', letter='K')}}">K</a></li>
+    <li><a href="{{url_for('letter', letter='L')}}">L</a></li>
+    <li><a href="{{url_for('letter', letter='M')}}">M</a></li>
+    <li><a href="{{url_for('letter', letter='N')}}">N</a></li>
+    <li><a href="{{url_for('letter', letter='O')}}">O</a></li>
+    <li><a href="{{url_for('letter', letter='P')}}">P</a></li>
+    <li><a href="{{url_for('letter', letter='Q')}}">Q</a></li>
+    <li><a href="{{url_for('letter', letter='R')}}">R</a></li>
+    <li><a href="{{url_for('letter', letter='S')}}">S</a></li>
+    <li><a href="{{url_for('letter', letter='T')}}">T</a></li>
+    <li><a href="{{url_for('letter', letter='U')}}">U</a></li>
+    <li><a href="{{url_for('letter', letter='V')}}">V</a></li>
+    <li><a href="{{url_for('letter', letter='W')}}">W</a></li>
+    <li><a href="{{url_for('letter', letter='X')}}">X</a></li>
+    <li><a href="{{url_for('letter', letter='Y')}}">Y</a></li>
+    <li><a href="{{url_for('letter', letter='Z')}}">Z</a></li>
+</ul>
+<table id="example" name="search_text" class="table table-striped" style="width: 100%;">
+    <thead>
+        <tr>
+        <th>GeneSymbol</th>
+        <th>Transcript ID</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for res in result %}
+    <tr>
+        <td><a href="#" data-bs-toggle="modal" data-bs-target="#myOutput{{res[0] }}" >{{res[0]}}</a></td>
+        <td>{{res[1]}}</td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+
+{% for res in result %}
+<div class="container mt-5">
+        
+        <div class="modal" id="myOutput{{res[0] }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Gene Information</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <b>
+                            <p id="genedata">
+                                Gene : {{res[0]}} <br>
+                                TranscriptID: {{res[1]}} <br>
+                                To know more about gene click proceed
+                            </p>
+                    </b>
+                    </div>
+                    <div class="modal-footer">
+
+                        
+                        <a href ="https://medlineplus.gov/genetics/gene/{{res[0].lower()}}/" target="_blank"><button type="button" class="btn btn-warning"  >Proceed</button></a>
+<button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+ 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endfor %}
+
+
+</body>
+
+</html>
+
